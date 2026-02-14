@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4" th:text="${course.title}">Course Title</h2>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-info-circle"></i> Course Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${course.image != null}" class="mb-3">
+                            <img th:src="@{${course.image}}" class="img-fluid rounded" alt="Course Image" style="max-height: 400px; width: 100%; object-fit: cover;">
+                        </div>
+                        <p th:text="${course.description}">Description</p>
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-person"></i> 
+                            Instructor: <span th:text="${course.teacher.fullName}">Teacher</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-list-ul"></i> Course Lessons</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${lessons.empty}" class="text-center py-4">
+                            <p class="text-muted">No lessons available yet</p>
+                        </div>
+                        
+                        <div th:unless="${lessons.empty}" class="list-group">
+                            <div th:each="lesson : ${lessons}" class="list-group-item">
+                                <h6 class="mb-2" th:text="${lesson.title}">Lesson Title</h6>
+                                <p class="mb-1" th:text="${lesson.content}">Lesson content</p>
+                                <small class="text-muted">Lesson #<span th:text="${lesson.orderNumber}"></span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="bi bi-trophy"></i> Your Grade</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${grade != null}">
+                            <h2 class="text-center mb-3" th:text="${grade.score} + '%'">Score</h2>
+                            <div th:if="${grade.feedback != null && !grade.feedback.isEmpty()}">
+                                <h6>Feedback:</h6>
+                                <p class="text-muted" th:text="${grade.feedback}">Feedback</p>
+                            </div>
+                            <p class="text-muted small mb-0">
+                                <i class="bi bi-calendar"></i> 
+                                Graded: <span th:text="${#temporals.format(grade.gradedDate, 'yyyy-MM-dd')}"></span>
+                            </p>
+                        </div>
+                        <div th:if="${grade == null}" class="text-center py-3">
+                            <p class="text-muted">Not graded yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

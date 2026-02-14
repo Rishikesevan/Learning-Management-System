@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4" th:text="${course.title}">Course Title</h2>
+        
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-info-circle"></i> Course Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${course.image != null}" class="mb-3">
+                            <img th:src="@{${course.image}}" class="img-fluid rounded" alt="Course Image" style="max-height: 400px; width: 100%; object-fit: cover;">
+                        </div>
+                        <p th:text="${course.description}">Description</p>
+                        <p class="text-muted">
+                            <i class="bi bi-calendar"></i> 
+                            Created: <span th:text="${#temporals.format(course.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-list-ul"></i> Lessons</h5>
+                        <a th:href="@{/teacher/upload-lesson(courseId=${course.id})}" class="btn btn-light btn-sm">
+                            <i class="bi bi-plus"></i> Add Lesson
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${lessons.empty}" class="text-center py-4">
+                            <p class="text-muted">No lessons yet</p>
+                        </div>
+                        <div th:unless="${lessons.empty}" class="list-group">
+                            <div th:each="lesson : ${lessons}" class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1" th:text="${lesson.title}">Lesson Title</h6>
+                                    <small class="text-muted">Order: <span th:text="${lesson.orderNumber}"></span></small>
+                                </div>
+                                <form th:action="@{/teacher/delete-lesson/{id}(id=${lesson.id})}" method="post"
+                                      onsubmit="return confirm('Are you sure?');">
+                                    <input type="hidden" name="courseId" th:value="${course.id}">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-people"></i> Enrolled Students</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Total:</strong> <span th:text="${enrollments.size()}">0</span></p>
+                        <div th:if="${!enrollments.empty}" class="list-group">
+                            <div th:each="enrollment : ${enrollments}" class="list-group-item">
+                                <span th:text="${enrollment.student.fullName}">Student Name</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

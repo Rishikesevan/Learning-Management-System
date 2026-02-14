@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="bi bi-journal-text"></i> Courses</h2>
+        
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <!-- Enrolled Courses -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-bookmark-check"></i> My Enrolled Courses</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${enrollments.empty}" class="text-center py-3">
+                    <p class="text-muted">You haven't enrolled in any courses yet.</p>
+                </div>
+                
+                <div th:unless="${enrollments.empty}" class="row g-3">
+                    <div th:each="enrollment : ${enrollments}" class="col-md-6">
+                        <div class="card h-100">
+                            <img th:if="${enrollment.course.image != null}" th:src="@{${enrollment.course.image}}" class="card-img-top" alt="Course Image" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${enrollment.course.title}">Course Title</h5>
+                                <p class="card-text text-muted small" 
+                                   th:text="${#strings.abbreviate(enrollment.course.description, 100)}">Description</p>
+                                <p class="small mb-2">
+                                    <i class="bi bi-person"></i> 
+                                    <span th:text="${enrollment.course.teacher.fullName}">Teacher</span>
+                                </p>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <a th:href="@{/student/course/{id}(id=${enrollment.course.id})}" 
+                                   class="btn btn-sm btn-primary">
+                                    <i class="bi bi-eye"></i> View Course
+                                </a>
+                                <form th:action="@{/student/unenroll/{id}(id=${enrollment.course.id})}" 
+                                      method="post" class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to unenroll?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-x-circle"></i> Unenroll
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Available Courses -->
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Available Courses</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${availableCourses.empty}" class="text-center py-3">
+                    <p class="text-muted">No more courses available to enroll.</p>
+                </div>
+                
+                <div th:unless="${availableCourses.empty}" class="row g-3">
+                    <div th:each="course : ${availableCourses}" class="col-md-6">
+                        <div class="card h-100">
+                            <img th:if="${course.image != null}" th:src="@{${course.image}}" class="card-img-top" alt="Course Image" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${course.title}">Course Title</h5>
+                                <p class="card-text" th:text="${course.description}">Description</p>
+                                <p class="small text-muted mb-0">
+                                    <i class="bi bi-person"></i> 
+                                    <span th:text="${course.teacher.fullName}">Teacher</span>
+                                </p>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <form th:action="@{/student/enroll/{id}(id=${course.id})}" method="post">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="bi bi-plus-circle"></i> Enroll Now
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

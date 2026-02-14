@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Hero Section -->
+                <div class="text-center mb-5">
+                    <h1 class="display-3 fw-bold text-primary">
+                        <i class="bi bi-book-half"></i> Learning Management System
+                    </h1>
+                    <p class="lead text-muted">Empowering Education Through Technology</p>
+                </div>
+                
+                <!-- Features -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+                                <h5 class="card-title mt-3">For Students</h5>
+                                <p class="card-text">Access courses, view lessons, and track your academic progress</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="bi bi-person-workspace text-success" style="font-size: 3rem;"></i>
+                                <h5 class="card-title mt-3">For Teachers</h5>
+                                <p class="card-text">Create courses, upload lessons, and grade student performance</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="bi bi-gear-fill text-danger" style="font-size: 3rem;"></i>
+                                <h5 class="card-title mt-3">For Admins</h5>
+                                <p class="card-text">Manage users, oversee courses, and monitor system activity</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="text-center">
+                    <div class="card shadow">
+                        <div class="card-body p-5">
+                            <h3 class="mb-4">Get Started Today</h3>
+                            <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                                <a th:href="@{/login}" class="btn btn-primary btn-lg px-5">
+                                    <i class="bi bi-box-arrow-in-right"></i> Login
+                                </a>
+                                <a th:href="@{/register}" class="btn btn-outline-primary btn-lg px-5">
+                                    <i class="bi bi-person-plus"></i> Register
+                                </a>
+                            </div>
+                            <p class="text-muted mt-4 mb-0">
+                                <small>Join thousands of students and teachers already using our platform</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

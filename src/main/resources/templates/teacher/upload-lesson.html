@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0"><i class="bi bi-upload"></i> Upload New Lesson</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/teacher/upload-lesson}" th:object="${lessonDTO}" method="post">
+                            <div class="mb-3">
+                                <label for="courseId" class="form-label">Select Course *</label>
+                                <select class="form-select" id="courseId" th:field="*{courseId}" required>
+                                    <option value="">Choose a course</option>
+                                    <option th:each="course : ${courses}" 
+                                            th:value="${course.id}" 
+                                            th:text="${course.title}"
+                                            th:selected="${selectedCourseId != null && selectedCourseId == course.id}">
+                                        Course
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Lesson Title *</label>
+                                <input type="text" class="form-control" id="title" th:field="*{title}" 
+                                       th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" 
+                                     th:errors="*{title}"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Lesson Content *</label>
+                                <textarea class="form-control" id="content" th:field="*{content}" 
+                                          rows="8" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''" 
+                                          required></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" 
+                                     th:errors="*{content}"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="orderNumber" class="form-label">Order Number *</label>
+                                <input type="number" class="form-control" id="orderNumber" th:field="*{orderNumber}" 
+                                       min="1" th:classappend="${#fields.hasErrors('orderNumber')} ? 'is-invalid' : ''" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('orderNumber')}" 
+                                     th:errors="*{orderNumber}"></div>
+                                <small class="text-muted">Determines the order in which lessons appear</small>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-upload"></i> Upload Lesson
+                                </button>
+                                <a th:href="@{/teacher/courses}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left"></i> Back
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Create New Course</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/teacher/create-course}" th:object="${courseDTO}" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Course Title *</label>
+                                <input type="text" class="form-control" id="title" th:field="*{title}" 
+                                       th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" 
+                                     th:errors="*{title}"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description *</label>
+                                <textarea class="form-control" id="description" th:field="*{description}" 
+                                          rows="5" th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''" 
+                                          required></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" 
+                                     th:errors="*{description}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="imageFile" class="form-label">Course Image</label>
+                                <input type="file" class="form-control" id="imageFile" th:field="*{imageFile}" accept="image/*">
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle"></i> Create Course
+                                </button>
+                                <a th:href="@{/teacher/courses}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left"></i> Back
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

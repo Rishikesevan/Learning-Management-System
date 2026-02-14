@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Teacher Dashboard</h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                        <h6>My Courses</h6>
+                        <h2 th:text="${totalCourses}">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-journal-text"></i> My Courses</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${courses.empty}" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                    <p class="text-muted mt-3">You haven't created any courses yet.</p>
+                    <a th:href="@{/teacher/create-course}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Create Your First Course
+                    </a>
+                </div>
+                
+                <div th:unless="${courses.empty}" class="row g-3">
+                    <div th:each="course : ${courses}" class="col-md-6">
+                        <div class="card h-100">
+                            <img th:if="${course.image != null}" th:src="@{${course.image}}" class="card-img-top" alt="Course Image" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${course.title}">Course Title</h5>
+                                <p class="card-text text-muted" th:text="${#strings.abbreviate(course.description, 100)}">Description</p>
+                                <a th:href="@{/teacher/course/{id}(id=${course.id})}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-eye"></i> View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

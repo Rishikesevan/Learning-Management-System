@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="bi bi-journal-text"></i> All Courses</h2>
+        
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Teacher</th>
+                                <th>Created Date</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="course : ${courses}">
+                                <td th:text="${course.id}">1</td>
+                                <td>
+                                    <img th:if="${course.image != null}" th:src="@{${course.image}}" alt="Img" style="width: 50px; height: 30px; object-fit: cover; border-radius: 4px;">
+                                </td>
+                                <td th:text="${course.title}">Course Title</td>
+                                <td th:text="${course.teacher.fullName}">Teacher Name</td>
+                                <td th:text="${#temporals.format(course.createdDate, 'yyyy-MM-dd')}">2024-01-01</td>
+                                <td th:text="${#strings.abbreviate(course.description, 100)}">Description</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

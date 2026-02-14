@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="bi bi-trophy"></i> My Grades</h2>
+        
+        <div th:if="${averageGrade != null}" class="card shadow mb-4 bg-primary text-white">
+            <div class="card-body text-center">
+                <h3 class="mb-0">Average Grade: <span th:text="${averageGrade} + '%'">0%</span></h3>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-body">
+                <div th:if="${grades.empty}" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                    <p class="text-muted mt-3">You don't have any grades yet</p>
+                </div>
+                
+                <div th:unless="${grades.empty}" class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Course</th>
+                                <th>Teacher</th>
+                                <th>Score</th>
+                                <th>Feedback</th>
+                                <th>Graded Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="grade : ${grades}">
+                                <td th:text="${grade.course.title}">Course</td>
+                                <td th:text="${grade.course.teacher.fullName}">Teacher</td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${grade.score >= 90} ? 'bg-success' : (${grade.score >= 75} ? 'bg-primary' : (${grade.score >= 60} ? 'bg-warning' : 'bg-danger'))"
+                                          th:text="${grade.score} + '%'">Score</span>
+                                </td>
+                                <td th:text="${grade.feedback != null ? grade.feedback : 'No feedback'}">Feedback</td>
+                                <td th:text="${#temporals.format(grade.gradedDate, 'yyyy-MM-dd')}">Date</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

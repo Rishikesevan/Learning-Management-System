@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Student Dashboard</h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                        <h6>Enrolled Courses</h6>
+                        <h2 th:text="${totalEnrolledCourses}">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-journal-text"></i> My Courses</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${enrollments.empty}" class="text-center py-4">
+                            <p class="text-muted">You are not enrolled in any courses yet.</p>
+                            <a th:href="@{/student/courses}" class="btn btn-primary">Browse Courses</a>
+                        </div>
+                        
+                        <div th:unless="${enrollments.empty}" class="list-group">
+                            <a th:each="enrollment : ${enrollments}" 
+                               th:href="@{/student/course/{id}(id=${enrollment.course.id})}"
+                               class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+                                <div style="width: 60px; height: 40px; flex-shrink: 0; overflow: hidden; border-radius: 4px; background-color: #f8f9fa;">
+                                    <img th:if="${enrollment.course.image != null}" th:src="@{${enrollment.course.image}}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <i th:if="${enrollment.course.image == null}" class="bi bi-image text-muted d-flex align-items-center justify-content-center h-100"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1" th:text="${enrollment.course.title}">Course Title</h6>
+                                    <small class="text-muted" th:text="${enrollment.course.teacher.fullName}">Teacher</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-trophy"></i> Recent Grades</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${recentGrades.empty}" class="text-center py-3">
+                            <p class="text-muted small">No grades yet</p>
+                        </div>
+                        
+                        <div th:unless="${recentGrades.empty}" class="list-group list-group-flush">
+                            <div th:each="grade : ${recentGrades}" class="list-group-item px-0">
+                                <div class="d-flex justify-content-between">
+                                    <small th:text="${grade.course.title}">Course</small>
+                                    <strong th:text="${grade.score} + '%'">Score</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a th:href="@{/student/grades}" class="btn btn-sm btn-outline-success w-100 mt-3">
+                            View All Grades
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

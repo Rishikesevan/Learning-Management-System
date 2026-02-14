@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4">
+            <i class="bi bi-list-ul"></i> Lessons: <span th:text="${course.title}">Course</span>
+        </h2>
+        
+        <div class="card shadow">
+            <div class="card-body">
+                <div th:if="${lessons.empty}" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                    <p class="text-muted mt-3">No lessons available yet</p>
+                </div>
+                
+                <div th:unless="${lessons.empty}">
+                    <div th:each="lesson, iterStat : ${lessons}" class="mb-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">
+                                    Lesson <span th:text="${lesson.orderNumber}"></span>: 
+                                    <span th:text="${lesson.title}">Title</span>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <p th:text="${lesson.content}">Content</p>
+                                <p class="text-muted small mb-0">
+                                    <i class="bi bi-calendar"></i> 
+                                    Added: <span th:text="${#temporals.format(lesson.createdDate, 'yyyy-MM-dd')}"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a th:href="@{/student/course/{id}(id=${course.id})}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Course
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

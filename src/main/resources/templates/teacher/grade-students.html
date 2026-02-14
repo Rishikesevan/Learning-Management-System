@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="bi bi-clipboard-check"></i> Grade Students</h2>
+        
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <form method="get">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label for="courseId" class="form-label">Select Course</label>
+                            <select class="form-select" id="courseId" name="courseId" onchange="this.form.submit()">
+                                <option value="">Choose a course</option>
+                                <option th:each="course : ${courses}" 
+                                        th:value="${course.id}" 
+                                        th:text="${course.title}"
+                                        th:selected="${selectedCourse != null && selectedCourse.id == course.id}">
+                                    Course
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div th:if="${selectedCourse != null}">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Students in: <span th:text="${selectedCourse.title}"></span></h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${enrollments.empty}" class="text-center py-4">
+                        <p class="text-muted">No students enrolled in this course</p>
+                    </div>
+                    
+                    <div th:unless="${enrollments.empty}" class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Email</th>
+                                    <th>Enrolled Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="enrollment : ${enrollments}">
+                                    <td th:text="${enrollment.student.fullName}">Student Name</td>
+                                    <td th:text="${enrollment.student.email}">Email</td>
+                                    <td th:text="${#temporals.format(enrollment.enrollmentDate, 'yyyy-MM-dd')}">Date</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-primary" 
+                                                data-bs-toggle="modal" 
+                                                th:data-bs-target="'#gradeModal' + ${enrollment.student.id}">
+                                            <i class="bi bi-pencil"></i> Assign Grade
+                                        </button>
+                                        
+                                        <!-- Grade Modal -->
+                                        <div class="modal fade" th:id="'gradeModal' + ${enrollment.student.id}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Assign Grade</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <form th:action="@{/teacher/assign-grade}" method="post">
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="studentId" th:value="${enrollment.student.id}">
+                                                            <input type="hidden" name="courseId" th:value="${selectedCourse.id}">
+                                                            
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Student</label>
+                                                                <input type="text" class="form-control" 
+                                                                       th:value="${enrollment.student.fullName}" readonly>
+                                                            </div>
+                                                            
+                                                            <div class="mb-3">
+                                                                <label for="score" class="form-label">Score (0-100) *</label>
+                                                                <input type="number" class="form-control" name="score" 
+                                                                       min="0" max="100" step="0.1" required>
+                                                            </div>
+                                                            
+                                                            <div class="mb-3">
+                                                                <label for="feedback" class="form-label">Feedback</label>
+                                                                <textarea class="form-control" name="feedback" rows="3"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary">Assign Grade</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
